@@ -1,0 +1,16 @@
+current directory: /Users/kimurayuta/Desktop/rails_workspace/rails_tutorial/sample_app/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.15.0/ext/bootsnap
+/Users/kimurayuta/.rbenv/versions/2.7.6/bin/ruby -I /Users/kimurayuta/.rbenv/versions/2.7.6/lib/ruby/site_ruby/2.7.0 extconf.rb
+creating Makefile
+
+current directory: /Users/kimurayuta/Desktop/rails_workspace/rails_tutorial/sample_app/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.15.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230113-36800-dkuprt sitelibdir\=./.gem.20230113-36800-dkuprt clean
+
+current directory: /Users/kimurayuta/Desktop/rails_workspace/rails_tutorial/sample_app/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.15.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230113-36800-dkuprt sitelibdir\=./.gem.20230113-36800-dkuprt
+compiling bootsnap.c
+linking shared-object bootsnap/bootsnap.bundle
+ld: warning: -undefined dynamic_lookup may not work with chained fixups
+
+current directory: /Users/kimurayuta/Desktop/rails_workspace/rails_tutorial/sample_app/vendor/bundle/ruby/2.7.0/gems/bootsnap-1.15.0/ext/bootsnap
+make DESTDIR\= sitearchdir\=./.gem.20230113-36800-dkuprt sitelibdir\=./.gem.20230113-36800-dkuprt install
+/usr/bin/install -c -m 0755 bootsnap.bundle ./.gem.20230113-36800-dkuprt/bootsnap
