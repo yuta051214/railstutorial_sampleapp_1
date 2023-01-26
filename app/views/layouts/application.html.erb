@@ -14,6 +14,12 @@
     <%# ヘッダー %>
     <%= render 'layouts/header' %>
 
+    <%# flashメッセージ %>
+    <% flash.each do |message_type, message| %>
+      <%# content_tag: タグを動的に生成。HTMLとERBが混ざってしまう場合などに使用するとすっきり表現できる。 %>
+      <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+    <% end %>
+
     <%# メイン %>
     <div class="container">
       <%= yield %>
@@ -21,5 +27,8 @@
 
     <%# フッター %>
     <%= render 'layouts/footer' %>
+
+    <%# デバッグ %>
+    <%= debug(params) if Rails.env.development? %>
   </body>
 </html>

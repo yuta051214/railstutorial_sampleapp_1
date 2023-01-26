@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  # パスワード認証(authentication)
   has_secure_password
 
   # コールバック
