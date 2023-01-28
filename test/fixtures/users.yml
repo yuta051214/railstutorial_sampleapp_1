@@ -1,0 +1,5 @@
+# user = users(:michael) で参照できるようにする(右辺は users.yml 内の michael の意味)
+michael:
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= User.digest("password") %>

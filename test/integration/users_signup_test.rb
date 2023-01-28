@@ -31,5 +31,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     assert_template 'users/show'
     # サクセスメッセージが表示されることを確認する
     assert_not flash[:success].empty?
+    # ログインしていることを確認する(test/test_helper.rbに書いたヘルパー)
+    assert is_logged_in?
   end
 end
