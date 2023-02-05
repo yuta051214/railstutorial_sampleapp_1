@@ -13,7 +13,8 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX }, uniqueness: { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 6 }
+  # allow_nil: trueは、update時にPWの変更がない場合にバリデーションにかからないように追加
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 
   # 渡された文字列、つまりPWのハッシュ値を返す(fixtureと、rememberメソッドで利用する)
   def self.digest(string)
