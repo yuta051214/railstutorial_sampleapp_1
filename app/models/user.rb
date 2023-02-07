@@ -1,13 +1,17 @@
 class User < ApplicationRecord
-  # Remember_me機能のための、DBへは保存せずにブラウザにのみ保存する仮想の属性(DBへ保存するのはハッシュ化後のremember_digest属性)
-  attr_accessor :remember_token
-
   # パスワード認証(authentication)
   has_secure_password
 
+  # 仮想の属性
+  # remember_token：Remember_me機能のための、DBへは保存せずにブラウザにのみ保存する仮想の属性(DBへ保存するのはハッシュ化後のremember_digest属性)
+  # activation_token：アカウント有効化のために、メールで送信する認証用のトークン
+  attr_accessor :remember_token, :activation_token
+
   # コールバック
-  before_save { self.email = self.email.downcase}
-  ## 省略形： { self.email = email.downcase }
+  # emailの小文字化
+  before_save :downcase_email
+  # アカウントの有効化
+  before_create :create_activation_digest
 
   # バリデーション
   validates :name, presence: true, length: { maximum: 50 }
@@ -43,16 +47,42 @@ class User < ApplicationRecord
     end
 
     # --- ログイン中 ---
-    # 渡された記憶トークンが、DBに保存されている記憶ダイジェストと一致したらtrueを返す
-    def authenticated?(remember_token)
-      # エラー対策：remember_digestが存在しない場合にfalseを返す処理を追加
-      return false if remember_digest.nil?
-      BCrypt::Password.new(self.remember_digest).is_password?(remember_token)  # self.remember_digestはremember_digestと省略可能
+    # 渡された記憶トークンが、DBに保存されている(記憶)ダイジェストと一致したらtrueを返す
+    def authenticated?(attribute, token)
+      # attributeの値によってremember_digestとactivation_digestを切り替える
+      digest = self.send("#{attribute}_digest")
+      # エラー対策：(remember_)digestが存在しない場合にfalseを返す処理を追加
+      return false if digest.nil?
+      BCrypt::Password.new(digest).is_password?(token)
     end
 
     # --- ログアウト時 ---
     # ユーザーのログイン情報を破棄する
     def forget
       update_attribute(:remember_digest, nil)
+    end
+
+
+    # アカウントを有効にする
+    def activate
+      self.update_columns(activated: true, activated_at: Time.zone.now)
+    end
+
+    # アカウント有効化のためのメールを送信する
+    def send_activation_email
+      UserMailer.account_activation(self).deliver_now
+    end
+
+  private
+  # コールバック
+    # emailの小文字化
+    def downcase_email
+      self.email = self.email.downcase  ## 省略形： { self.email = email.downcase }
+    end
+
+    # アカウントの有効化（Account Activation）
+    def create_activation_digest
+      self.activation_token = User.new_token
+      self.activation_digest = User.digest(activation_token)
     end
 end

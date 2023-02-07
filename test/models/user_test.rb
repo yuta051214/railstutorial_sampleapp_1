@@ -10,7 +10,7 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-# asser_not はvalidationが効いているかをテストするときによく使うものである
+# assert_not はvalidationが効いているかをテストするときによく使うものである
   # 存在性を検証する
   test "name should be present" do
     @user.name = ' '
@@ -72,6 +72,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "authenticated? should return false for a user with nil digest" do
-    assert_not @user.authenticated?("")
+    assert_not @user.authenticated?(:remember, "")
   end
 end

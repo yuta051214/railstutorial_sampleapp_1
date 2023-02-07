@@ -6,12 +6,14 @@ class UsersController < ApplicationController
 
   # before_action：ログインしていること
   def index
-    # ページネーション
-    @users = User.paginate(page: params[:page])
+    # ページネーション + 有効化されているユーザのみ表示する
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   def show
     @user = User.find(params[:id])
+    # 有効化されているユーザのみ表示する
+    redirect_to root_url and return unless @user.activated?
   end
 
   def new
@@ -21,10 +23,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      # ユーザ登録時にログインできるようにする(sessions_helper)
-      log_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
     else
       render 'new'
     end

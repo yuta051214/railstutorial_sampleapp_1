@@ -5,9 +5,11 @@
 <%= will_paginate %>
 
 <ul class="users">
+
   <%# @usersはUserクラスのオブジェクトなので、Railsが_user.html.erbを自動で使用する。 %>
   <%# また@usersをリストであると推測するため、自動的に繰り返し処理を行う。 %>
   <%= render @users %>
+
 </ul>
 
 <%= will_paginate %>

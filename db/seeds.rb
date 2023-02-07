@@ -7,13 +7,13 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 # メインのサンプルユーザを1人作成する
-User.create!(name: "Example User", email: "example@railstutorial.org", password: "foobar", password_confirmation: "foobar", admin: true)
+User.create!(name: "Example User", email: "example@railstutorial.org", password: "foobar", password_confirmation: "foobar", admin: true, admin: true, activated: true, activated_at: Time.zone.now)
 
 # 追加のユーザをまとめて作成する
 99.times do |n|
   name = Faker::Name.name
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
-  User.create!(name: name, email: email, password: password, password_confirmation: password)
+  User.create!(name: name, email: email, password: password, password_confirmation: password, activated: true, activated_at: Time.zone.now)
 end
 ## create! は、作成したユーザが無効な場合にfalseを返すのではなく例外を発生させるため、見過ごしやすいエラーを回避できるのでデバッグが容易になる。

@@ -1,0 +1,11 @@
+Hi <%= @user.name %>,
+
+Welcome to the Sample App! Click on the link below to activate your account:
+
+<%# URLに引数の情報を含めて、メイラーで受け取る %>
+<%= edit_account_activation_url(@user.activation_token, email: @user.email) %>
+
+<%# edit_user_path(@user)  から生成されるURLは https://www.example.com/users/1/edit であるように、 %>
+<%# edit_account_activation_url(@user.activation_token, email: @user.email)  から生成されるURLは、 %>
+<%# https://www.example.com/account_activations/(トークン)/edit?email=foo%40example.com である。%>
+<%# %40 は「＠」のこと %>
