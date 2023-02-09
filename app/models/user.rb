@@ -5,7 +5,8 @@ class User < ApplicationRecord
   # 仮想の属性
   # remember_token：Remember_me機能のための、DBへは保存せずにブラウザにのみ保存する仮想の属性(DBへ保存するのはハッシュ化後のremember_digest属性)
   # activation_token：アカウント有効化のために、メールで送信する認証用のトークン
-  attr_accessor :remember_token, :activation_token
+  # reset_token：パスワードの再設定用のトークン
+  attr_accessor :remember_token, :activation_token, :reset_token
 
   # コールバック
   # emailの小文字化
@@ -63,6 +64,7 @@ class User < ApplicationRecord
     end
 
 
+  # アカウント有効化機能
     # アカウントを有効にする
     def activate
       self.update_columns(activated: true, activated_at: Time.zone.now)
@@ -71,6 +73,24 @@ class User < ApplicationRecord
     # アカウント有効化のためのメールを送信する
     def send_activation_email
       UserMailer.account_activation(self).deliver_now
+    end
+
+  # パスワードリセット機能
+    # トークンの生成、ダイジェストの保存
+    def create_reset_digest
+      self.reset_token = User.new_token
+      update_attribute(:reset_digest, User.digest(self.reset_token))
+      update_attribute(:reset_sent_at, Time.zone.now)
+    end
+
+    # メールを送信する
+    def send_password_reset_email
+      UserMailer.password_reset(self).deliver_now
+    end
+
+    # パスワード再設定の期限が切れている場合はtrueを返す
+    def password_reset_expired?
+      reset_sent_at < 2.hours.ago
     end
 
   private
