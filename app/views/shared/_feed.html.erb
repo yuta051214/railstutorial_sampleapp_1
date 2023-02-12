@@ -1,0 +1,8 @@
+<% if @feed_items.any? %>
+  <%# @feed_itemsの各要素はMicropostクラスを持っているため、railsが自動的にmicroposts/_micropost.html.erbパーシャルを使用する。 %>
+  <ol class="microposts">
+    <%= render @feed_items %>
+  </ol>
+  <%# microposts#indexに飛ばないよう、params以下によって明示的に送信先を指定する %>
+  <%= will_paginate @feed_items, params: { controller: :static_pages, action: :home } %>
+<% end %>

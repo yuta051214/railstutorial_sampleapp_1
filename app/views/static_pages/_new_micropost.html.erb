@@ -1,0 +1,20 @@
+<%# ログイン中のユーザに対して表示する、micropostの投稿ページ %>
+<div class="row">
+  <aside class="col-md-4">
+    <%# ユーザ情報 %>
+    <section class="user_info">
+      <%= render 'shared/user_info' %>
+    </section>
+
+    <%# 投稿フォーム %>
+    <section class="micropost_form">
+      <%= render 'shared/micropost_form' %>
+    </section>
+  </aside>
+
+  <%# フィード %>
+  <div class="col-md-8">
+    <h3>Micropost Feed</h3>
+    <%= render "shared/feed" %>
+  </div>
+</div>

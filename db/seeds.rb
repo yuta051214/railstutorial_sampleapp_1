@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# --- ユーザ ---
 # メインのサンプルユーザを1人作成する
 User.create!(name: "Example User", email: "example@railstutorial.org", password: "foobar", password_confirmation: "foobar", admin: true, admin: true, activated: true, activated_at: Time.zone.now)
 
@@ -17,3 +18,14 @@ User.create!(name: "Example User", email: "example@railstutorial.org", password:
   User.create!(name: name, email: email, password: password, password_confirmation: password, activated: true, activated_at: Time.zone.now)
 end
 ## create! は、作成したユーザが無効な場合にfalseを返すのではなく例外を発生させるため、見過ごしやすいエラーを回避できるのでデバッグが容易になる。
+
+# --- 投稿 ---
+# ユーザの一部を対象にマイクロポストを生成する
+users = User.order(:created_at).take(6)
+
+50.times do
+  content = Faker::Lorem.sentence(word_count: 5)
+  users.each do |user|
+    user.microposts.create!(content: content)
+  end
+end

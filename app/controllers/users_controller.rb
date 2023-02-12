@@ -12,6 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
     # 有効化されているユーザのみ表示する
     redirect_to root_url and return unless @user.activated?
   end
@@ -61,16 +62,6 @@ class UsersController < ApplicationController
     end
 
     # フィルター
-    # ログインしていない状態でのアクセスを防ぐ
-    def logged_in_user
-      unless logged_in?
-        # アクセス先を session[:forwarding_url]に保存
-        store_location
-        flash[:danger] = "Please log in."
-        redirect_to login_url
-      end
-    end
-
     # 本人以外のユーザ情報へのアクセスを防ぐ
     def correct_user
       @user = User.find(params[:id])

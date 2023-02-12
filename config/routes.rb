@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   # PWの再設定機能
   resources :password_resets, only: [:new, :create, :edit, :update]
 
+  # マイクロポスト
+  resources :microposts, only: [:create, :destroy]
+
   # root 'application#hello'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
