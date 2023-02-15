@@ -29,3 +29,13 @@ users = User.order(:created_at).take(6)
     user.microposts.create!(content: content)
   end
 end
+
+# --- 関連 ---
+users = User.all
+user  = users.first
+following = users[2..50]
+followers = users[3..40]
+# ユーザ1は、ユーザ3~51をフォローする
+following.each { |followed| user.follow(followed) }
+# ユーザ4~41は、ユーザ1をフォローする
+followers.each { |follower| follower.follow(user) }

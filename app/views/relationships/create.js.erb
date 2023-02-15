@@ -1,0 +1,12 @@
+// Javascriptと埋め込みRuby(RJS:Ruby JavaScript)を使ってフォローの関係性を作成する
+$("#follow_form").html("<%= escape_javascript(render('users/unfollow')) %>");
+$("#followers").html("<%= @user.followers.count %>");
+
+/*
+RailsはAjaxリクエストを受信した場合、自動的にアクションと同じ名前を持つJavaScript用の埋め込みRubyファイル
+(.js.erb)を呼び出す。
+これらのファイルではJavaScriptと埋め込みRubyをミックスして現在のページに対するアクションを実行することができる。
+  $("#follow_form")：DOM要素にアクセスする
+  htmlメソッド：指定された要素の内側にあるHTMLを、引数の内容で更新します。
+  escape_javascriptメソッド：JSファイル内にHTMLを挿入するときに実行結果をエスケープするために必要です。
+*/

@@ -1,7 +1,15 @@
 class User < ApplicationRecord
   # リレーション
-  # dependent: :destroy：ユーザが削除された場合、同時に投稿も削除される。
-  has_many :microposts, dependent: :destroy
+    # マイクロポスト機能
+    # dependent: :destroy：ユーザが削除された場合、同時に投稿も削除される。
+    has_many :microposts, dependent: :destroy
+    # フォロー機能
+    ## リレーションの定義
+    has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
+    has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
+    ## 参照先の指定？
+    has_many :following, through: :active_relationships, source: :followed
+    has_many :followers, through: :passive_relationships, source: :follower
 
   # パスワード認証(authentication)
   has_secure_password
@@ -97,10 +105,28 @@ class User < ApplicationRecord
       reset_sent_at < 2.hours.ago
     end
 
-    # フィード機能
+    # ステータスフィード機能
     def feed
-      # "?" はSQLインジェクション対策として変数をエスケープしている。
-      Micropost.where("user_id = ?", id)
+      # following_ids：フォローしているユーザのidを配列として取得する。スケール時の負荷対策、サブクエリとして使用。
+      following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
+      # id：ログイン中のユーザのid
+      Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id)
+    end
+
+    # フォロー機能
+    # ユーザをフォローする
+    def follow(other_user)
+      self.following << other_user
+    end
+
+    # フォローを解除する
+    def unfollow(other_user)
+      self.active_relationships.find_by(followed_id: other_user.id).destroy
+    end
+
+    # 現在のユーザがフォローしていたらtrueを返す
+    def following?(other_user)
+      self.following.include?(other_user)
     end
 
   private

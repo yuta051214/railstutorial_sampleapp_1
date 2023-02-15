@@ -1,21 +1,28 @@
 <% provide(:title, @user.name) %>
 <div class="row">
-  <%# ユーザ情報 %>
+  <%# サイドバー %>
   <aside class="col-md-4">
+    <%# ユーザの画像・名前 %>
     <section class="user_info">
       <h1>
         <%= gravatar_for @user %>
         <%= @user.name %>
       </h1>
     </section>
+    <%# フォロー・フォロワー数 %>
+    <section class="stats">
+      <%= render "shared/stats" %>
+    </section>
   </aside>
 
-  <%# 投稿一覧 %>
+  <%# メイン %>
   <div class="col-md-8">
+    <%# フォロー・フォロー解除ボタン %>
+    <%= render "follow_form" if logged_in? %>
+    <%# マイクロポストの一覧 %>
     <% if @user.microposts.any? %>
       <h3>Microposts (<%= @user.microposts.count %>)</h3>
       <ol class="microposts">
-        <%# パーシャル %>
         <%= render @microposts %>
       </ol>
       <%# usersコントローラから@micropostsを送っているため引数が必要になる %>
